@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import resolve from "../3/resolve.js";
 
 /**
  * Примерный алгоритм работы бандлера:
@@ -19,7 +20,7 @@ const modules = ['const module = {};\n'];
  * @param {string} entryPath - путь к entry бандлинга
  */
 export function bundle(entryPath, dirname = '') {
-    const absPath = path.resolve(path.join(dirname, entryPath));
+    const absPath = resolve(entryPath, dirname);
     const file = fs.readFileSync(absPath, {encoding: 'utf8'});
 
     modules.push(`module['${entryPath}'] = function(module, require){\n${file}\n};`);
