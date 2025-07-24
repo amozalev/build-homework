@@ -12,7 +12,7 @@ export function resolve(importPath, parentPath) {
     const importsArr = Object.keys(imports);
     // resolve aliases
     for (const alias of importsArr) {
-        const filePath = getFilePathWithExt(path.join(imports[alias], path.relative(alias, importPath)), './', extensionsToResolve);
+        const filePath = getFilePathWithExt(path.join(imports[alias], path.relative(alias, importPath)), rootDir, extensionsToResolve);
         if (filePath) {
             return filePath;
         }
@@ -47,10 +47,14 @@ function getFilePathWithExt(importPath, parentPath, extensionsToResolve) {
     return null;
 }
 
-function getFilePath(importPath, parentPath) {
-    const parentDirname = path.dirname(parentPath);
+function getFilePath(importPath, parentPath = '.') {
+    let filePath = path.resolve(parentPath, importPath);
+    if (isFileExists(filePath)) {
+        return filePath;
+    }
 
-    const filePath = path.resolve(parentDirname, importPath);
+    const parentDirname = path.dirname(parentPath);
+    filePath = path.resolve(parentDirname, importPath);
     if (isFileExists(filePath)) {
         return filePath;
     }
