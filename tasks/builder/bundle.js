@@ -1,6 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import resolve from "../3/resolve.js";
+import {resolve} from "../3/resolve.js";
+import {transformer} from "task-4/transformer.js";
+import {parse} from "acorn";
+import * as astring from "astring";
 
 /**
  * Примерный алгоритм работы бандлера:
@@ -45,11 +48,13 @@ export function bundle(entryPath, dirname = '') {
         return;
     }
 
-    return `
+    const bundled = `
     ${modules.join('\n')}
     const require = ${require};
-    (function(module, require){\n${file}\n})(module, require);
+    module['${entryPath}'](module, require);
     `;
+
+    return transform(bundled);
 }
 
 /**
@@ -61,6 +66,21 @@ function searchRequireCalls(code) {
     return [...code.matchAll(/require\(('|")(.*)('|")\)/g)].map(
         (item) => item[2]
     );
+}
+
+/**
+ * Функция для трансформации кода модуля
+ * Возвращает трансформированный код
+ * @param {string} file
+ */
+function transform(fileStr) {
+    const ast = parse(fileStr, {ecmaVersion: 2020, sourceType: "module"});
+
+    const jsonStr = JSON.stringify(ast, null, 2)
+    fs.writeFileSync("./ast.js", jsonStr);
+
+    const transformedAst = transformer(ast);
+    return astring.generate(transformedAst);
 }
 
 
