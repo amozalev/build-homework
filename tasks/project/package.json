@@ -2,10 +2,11 @@
   "name": "task-5",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build:webpack": "NODE_ENV=development webpack",
     "build:vite": "NODE_ENV=development vite build",
-    "build:esbuild": "NODE_ENV=development node --experimental-strip-types esbuild.ts",
+    "build:esbuild": "NODE_ENV=development node --experimental-strip-types --trace-warnings esbuild.ts",
     "build:rollup": "NODE_ENV=development rollup --config rollup.config.js",
     "build:all": "yarn build:webpack && yarn build:vite && yarn build:esbuild && yarn build:rollup",
     "start": "node server.js",
