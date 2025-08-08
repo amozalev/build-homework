@@ -3,20 +3,69 @@ import path from "node:path";
 
 const packageJSON = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
 
-const { imports } = packageJSON;
+const {imports} = packageJSON;
 const rootDir = path.resolve(".");
 
 const extensionsToResolve = ["js", "ts", "json"];
 
 export function resolve(importPath, parentPath) {
-  
+    const importsArr = Object.keys(imports);
+    // resolve aliases
+    for (const alias of importsArr) {
+        const filePath = getFilePathWithExt(path.join(imports[alias], path.relative(alias, importPath)), rootDir, extensionsToResolve);
+        if (filePath) {
+            return filePath;
+        }
+    }
+
+    // resolve full path
+    const filePath = getFilePathWithExt(importPath, parentPath, extensionsToResolve);
+    if (filePath) {
+        return filePath;
+    }
+
+    return null;
+}
+
+function getFilePathWithExt(importPath, parentPath, extensionsToResolve) {
+    // extension exists in importPath
+    const extension = path.extname(importPath);
+    const filePath = getFilePath(importPath, parentPath);
+    if (extension && filePath) {
+        return filePath;
+    }
+
+    // importPath without extension
+    for (const ext of extensionsToResolve) {
+        const importPathWithExt = `${importPath}.${ext}`;
+        const filePath = getFilePath(importPathWithExt, parentPath);
+        if (filePath) {
+            return filePath;
+        }
+    }
+
+    return null;
+}
+
+function getFilePath(importPath, parentPath = '.') {
+    let filePath = path.resolve(parentPath, importPath);
+    if (isFileExists(filePath)) {
+        return filePath;
+    }
+
+    const parentDirname = path.dirname(parentPath);
+    filePath = path.resolve(parentDirname, importPath);
+    if (isFileExists(filePath)) {
+        return filePath;
+    }
+    return null;
 }
 
 function isFileExists(filePath) {
-  try {
-    fs.readFileSync(filePath);
-    return filePath;
-  } catch (err) {
-    return null;
-  }
+    try {
+        fs.readFileSync(filePath);
+        return filePath;
+    } catch (err) {
+        return null;
+    }
 }
