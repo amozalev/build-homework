@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "build": "node index.js ./src/entry.cjs",
     "watch": "node watch.js ./watch/entry.cjs",
     "build": "rm -rf ./dist && node index.js ./src/entry.cjs",
     "build:resolve": "node index.js ./resolve/entry.cjs",
