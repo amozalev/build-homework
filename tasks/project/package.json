@@ -2,7 +2,6 @@
   "name": "task-5",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "build:webpack": "NODE_ENV=development webpack",
     "build:vite": "NODE_ENV=development vite build",
