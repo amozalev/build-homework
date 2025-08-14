@@ -27,7 +27,32 @@ const config = {
     }),
   ],
   module: {
-    rules: [],
+    rules: [
+      {
+        test: path.resolve(".", "./src/assets/logo.svg"),
+        type: "asset/inline"
+      },
+      {
+        test: /assets\/avatar.svg$/,
+        type: "asset/resource"
+      },
+      {
+        test: /template.ejs$/,
+        type: "asset/source"
+      },
+      {
+        test: /illustration.png$/,
+        type: "asset/resource"
+      },
+      {
+        test: /ad.inline.svg$/,
+        type: "asset/inline"
+      },
+      {
+        test: /data.json$/,
+        type: "asset/source"
+      }
+    ],
   },
 };
 

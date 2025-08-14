@@ -1,5 +1,5 @@
 import esbuild from "esbuild";
-import { htmlPlugin } from "@craftamap/esbuild-plugin-html";
+import {htmlPlugin} from "@craftamap/esbuild-plugin-html";
 import inlineImage from 'esbuild-plugin-inline-image';
 
 const options = {
@@ -9,6 +9,12 @@ const options = {
   outdir: "dist/esbuild",
   assetNames: 'assets/[name]',
   publicPath: 'http://localhost:3000/esbuild/',
+  loader: {
+    ".svg": "copy",
+    ".ejs": "text",
+    ".png": "file",
+    ".json": "text"
+  },
   plugins: [
     htmlPlugin({
       files: [
@@ -32,6 +38,13 @@ const options = {
         },
       ],
     }),
+    inlineImage({
+      // extensions: ["svg"]
+      limit: ({path}) => {
+        const img = path.split("/").at(-1);
+        return img === "logo.svg" || img === "ad.inline.svg";
+      }
+    })
   ],
 };
 
