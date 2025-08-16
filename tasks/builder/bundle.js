@@ -4,6 +4,7 @@ import {resolve} from "../3/resolve.js";
 import {transformer} from "task-4/transformer.js";
 import {parse} from "acorn";
 import * as astring from "astring";
+import jsonLoader from "./plugins/json-loader.js";
 
 /**
  * Примерный алгоритм работы бандлера:
@@ -24,7 +25,11 @@ const modules = ['const module = {};\n'];
  */
 export function bundle(entryPath, dirname = '') {
     const absPath = resolve(entryPath, dirname);
-    const file = fs.readFileSync(absPath, {encoding: 'utf8'});
+    let file = fs.readFileSync(absPath, {encoding: 'utf8'});
+
+    if (absPath.endsWith(".json")) {
+        file = jsonLoader(file);
+    }
 
     modules.push(`module['${entryPath}'] = function(module, require){\n${file}\n};`);
 
