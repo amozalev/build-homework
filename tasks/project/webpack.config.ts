@@ -45,7 +45,8 @@ const config: Configuration = {
   ],
   experiments: {
     css: true
-  }
+  },
+  devtool: 'hidden-source-map'
 };
 
 export default config;

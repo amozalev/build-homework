@@ -38,7 +38,8 @@ const options = {
                 }
             ]
         })
-    ]
+    ],
+    sourcemap: 'external',
 };
 
 (async function () {

@@ -17,6 +17,7 @@ export default {
         file: './dist/rollup/main.js',
         format: 'iife',
         assetFileNames: '[name][extname]',
+        sourcemap: 'hidden'
     },
     // jsx: {
     //     mode: 'automatic'

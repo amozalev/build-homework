@@ -5,6 +5,7 @@ export default defineConfig({
     base: '/vite/',
     build: {
         outDir: 'dist/vite',
+        sourcemap: 'hidden'
     },
     plugins: [tsconfigPaths()],
 })
